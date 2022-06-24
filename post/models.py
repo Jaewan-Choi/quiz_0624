@@ -8,10 +8,16 @@ class SkillSet(models.Model):
     class Meta:
         db_table = 'skill_sets'
 
+    def __str__(self):
+        return f"[기술] {self.name}"
+
 
 class JobPostSkillSet(models.Model):
     skill_set = models.ForeignKey('SkillSet', on_delete=models.SET_NULL, null=True)
     job_post = models.ForeignKey('JobPost', on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return f"{self.skill_set} / {self.job_post}"
 
 
 class JobType(models.Model):
@@ -19,6 +25,9 @@ class JobType(models.Model):
 
     class Meta:
         db_table = 'job_types'
+
+    def __str__(self):
+        return f"[타입] {self.job_type}"
 
 
 class JobPost(models.Model):
@@ -32,6 +41,9 @@ class JobPost(models.Model):
     class Meta:
         db_table = 'job_posts'
 
+    def __str__(self):
+        return f"[공고] {self.company.company_name}"
+
 
 class Company(models.Model):
     company_name = models.CharField(max_length=128)
@@ -39,6 +51,9 @@ class Company(models.Model):
 
     class Meta:
         db_table = 'companies'
+
+    def __str__(self):
+        return f"[회사] {self.company_name}"
 
 
 class CompanyBusinessArea(models.Model):
@@ -48,9 +63,15 @@ class CompanyBusinessArea(models.Model):
     class Meta:
         db_table = 'company_business_areas'
 
+    def __str__(self):
+        return f"{self.company} / {self.business_area}"
+
 
 class BusinessArea(models.Model):
     area = models.CharField(max_length=128)
 
     class Meta:
         db_table = 'business_areas'
+
+    def __str__(self):
+        return f"[분야] {self.area}"

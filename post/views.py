@@ -8,7 +8,7 @@ from .models import (
     Company
 )
 from django.db.models.query_utils import Q
-from .serializers import JobPostSerializer
+from .serializers import JobPostSkillSetSerializer
 from django.shortcuts import get_object_or_404
 
 
@@ -18,9 +18,14 @@ class SkillView(APIView):
 
     def get(self, request):
         skills = self.request.query_params.getlist('skills', '')
-        print("skills = ", end=""), print(skills)
+        query = Q()
+        for skill in skills:
+            query.add(Q(skill_set__name=skill), Q.OR)
+        
+        job_posts = JobPostSkillSet.objects.filter(query)
+        job_posts_serializer = JobPostSkillSetSerializer(job_posts, many=True)
 
-        return Response(status=status.HTTP_200_OK)
+        return Response({'기술 검색 결과': job_posts_serializer.data}, status=status.HTTP_200_OK)
 
 
 class JobView(APIView):
